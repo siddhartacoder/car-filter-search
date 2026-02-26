@@ -87,6 +87,7 @@ function mostrarAutos(autos) {
   });
 }
 
+// Removes all child elements from the results container
 function limpiarHTML() {
   while (resultado.firstChild) {
     resultado.removeChild(resultado.firstChild);
@@ -109,8 +110,25 @@ function filtrarAuto() {
     .filter(filtrarMarca)
     .filter(filtrarYear)
     .filter(filtrarMinimo)
-    .filter(filtrarMaximo);
-  mostrarAutos(resultado);
+    .filter(filtrarMaximo)
+    .filter(filtrarPuertas)
+    .filter(filtrarTransmision)
+    .filter(filtrarColor);
+
+  if (resultado.length) {
+    mostrarAutos(resultado);
+  } else {
+    noResultado();
+  }
+}
+
+// Displays error message when no cars match the selected criteria
+function noResultado() {
+  limpiarHTML();
+  const divNoResultado = document.createElement("div");
+  divNoResultado.classList.add("alerta" , "error");
+  divNoResultado.textContent = "No se encontraron vehiculos con esos criterios.";
+  resultado.appendChild(divNoResultado);
 }
 
 // Filters cars by brand if a brand has been selected
@@ -144,6 +162,33 @@ function filtrarMinimo(auto) {
 function filtrarMaximo(auto) {
   if (datosBusqueda.maximo) {
     return auto.precio <= datosBusqueda.maximo;
+  } else {
+    return auto;
+  }
+}
+
+// Filters cars by number of doors if selected
+function filtrarPuertas(auto) {
+  if (datosBusqueda.puertas) {
+    return auto.puertas === datosBusqueda.puertas;
+  } else {
+    return auto;
+  }
+}
+
+// Filters cars by transmission type if selected
+function filtrarTransmision(auto) {
+  if (datosBusqueda.transmision) {
+    return auto.transmision === datosBusqueda.transmision;
+  } else {
+    return auto;
+  }
+}
+
+// Filters cars by color that has been selected
+function filtrarColor(auto) {
+  if (datosBusqueda.color) {
+    return auto.color === datosBusqueda.color;
   } else {
     return auto;
   }
